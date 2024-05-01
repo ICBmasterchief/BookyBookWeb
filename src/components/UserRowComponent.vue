@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import { User } from '@/assets/types'
+import type { User } from '@/core/types'
 
 const props = defineProps<{
   user: User

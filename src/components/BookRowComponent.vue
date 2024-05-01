@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
-import { Book } from '@/assets/types'
+import type { Book } from '@/core/types'
 
 const props = defineProps<{
   book: Book

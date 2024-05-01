@@ -1,14 +1,23 @@
-interface Book {
+export interface Book {
   id: number
   title: string
   author: string
-  genre: string
-  year: number
+  genre: string | null
+  year: number | null
   copies: number
   score: number
 }
 
-interface Borrowing {
+export interface BookPOST {
+  title: string
+  author: string
+  genre: string | null
+  year: number | null
+  copies: number
+  score: number
+}
+
+export interface Borrowing {
   id: number
   borrowingDate: Date
   dateToReturn: Date
@@ -19,7 +28,7 @@ interface Borrowing {
   bookId: number
 }
 
-interface User {
+export interface User {
   id: number
   name: string
   email: string

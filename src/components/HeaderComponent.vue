@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useUserStore } from '@/stores/UserStore'
+import { useAuthStore } from '@/stores/AuthStore'
 
-const store = useUserStore()
+const authStore = useAuthStore()
 
 const appTitle = ref('BookyBook')
 </script>
@@ -12,17 +12,21 @@ const appTitle = ref('BookyBook')
     <router-link class="app-title" to="/">{{ appTitle }}</router-link>
     <div class="menu-items">
       <router-link to="/library" class="menu-link">Library</router-link>
-      <router-link v-if="!store.isAuthenticated" to="/login" class="menu-link">Login</router-link>
-      <router-link v-if="!store.isAuthenticated" to="/register" class="menu-link"
+      <router-link v-if="!authStore.isAuthenticated" to="/login" class="menu-link"
+        >Login</router-link
+      >
+      <router-link v-if="!authStore.isAuthenticated" to="/register" class="menu-link"
         >Register</router-link
       >
-      <router-link v-if="store.isAuthenticated" to="/account" class="menu-link"
+      <router-link v-if="authStore.isAuthenticated" to="/account" class="menu-link"
         >Account</router-link
       >
-      <router-link v-if="store.isAuthenticated" to="/donatebook" class="menu-link"
+      <router-link v-if="authStore.isAuthenticated" to="/donatebook" class="menu-link"
         >Donate book</router-link
       >
-      <router-link v-if="store.role === 'admin'" to="/users" class="menu-link">Users</router-link>
+      <router-link v-if="authStore.role === 'admin'" to="/users" class="menu-link"
+        >Users</router-link
+      >
     </div>
     <div class="placeholder"></div>
   </v-toolbar>

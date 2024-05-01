@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useBookStore } from '@/stores/BookStore'
-import { Book } from '@/assets/types'
+import type { BookPOST } from '@/core/types'
 
-const book = ref<Book>({
+const book = ref<BookPOST>({
   title: '',
   author: '',
   genre: '',
@@ -53,7 +53,7 @@ const submitBook = () => {
       genre: '',
       year: null,
       copies: 0,
-      rating: 0
+      score: 0
     }
   }
 }
@@ -64,7 +64,7 @@ const submitBook = () => {
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-card>
-          <v-card-title> Dona un libro a la biblioteca </v-card-title>
+          <v-card-title>Dona un libro a la biblioteca</v-card-title>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-text-field
@@ -117,5 +117,14 @@ const submitBook = () => {
 .score {
   margin-left: 20px;
   font-size: 2rem;
+}
+
+.v-card-title {
+  font-size: 2rem;
+}
+
+.v-btn {
+  margin: 10px;
+  font-size: 1.4rem;
 }
 </style>
