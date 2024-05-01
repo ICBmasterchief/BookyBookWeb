@@ -21,6 +21,12 @@
 .v-footer {
   background-color: #333;
   color: white;
-  font-size: 2vh;
+  font-size: 1.75vh;
+  padding: 0rem;
+}
+
+.text-center {
+  padding-top: 0;
+  padding-bottom: 1.5rem;
 }
 </style>

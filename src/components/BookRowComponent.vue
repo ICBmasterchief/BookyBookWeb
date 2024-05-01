@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import type { Book } from '@/core/types'
+import { useAuthStore } from '@/stores/AuthStore'
+
+const authStore = useAuthStore()
 
 const props = defineProps<{
   book: Book
 }>()
 
-const emit = defineEmits(['bookSelected'])
+const emit = defineEmits(['bookSelected', 'requestBorrowing'])
 
 const emitDetails = (book: Book) => {
   emit('bookSelected', book)
+}
+
+const requestBorrowing = (book: Book) => {
+  emit('requestBorrowing', book)
 }
 </script>
 
@@ -20,6 +27,9 @@ const emitDetails = (book: Book) => {
     </v-list-item-content>
     <v-list-item-action class="book-content">
       <v-btn @click="emitDetails(book)" class="btn"> Ver detalles </v-btn>
+      <v-btn v-if="authStore.isAuthenticated" @click="requestBorrowing(props.book)" class="loan-btn"
+        >Solicitar préstamo</v-btn
+      >
     </v-list-item-action>
     <v-divider></v-divider>
   </v-list-item>
@@ -27,11 +37,11 @@ const emitDetails = (book: Book) => {
 
 <style scoped>
 .headline {
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .subtitle-1 {
-  font-size: 1rem;
+  font-size: 0.75rem;
 }
 
 .book-content {
@@ -41,11 +51,14 @@ const emitDetails = (book: Book) => {
 }
 
 .btn {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  margin: 0px;
+  left: -20%;
+  font-size: 0.6rem;
+}
+
+.loan-btn {
+  margin: 0px;
+  font-size: 0.6rem;
 }
 
 @media (max-width: 1280px) {
@@ -56,13 +69,18 @@ const emitDetails = (book: Book) => {
   .subtitle-1 {
     font-size: 0.5rem;
   }
+}
+
+@media (max-width: 880px) {
   .btn {
-    font-size: 0.5rem;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+    margin: 0px;
+    left: -20%;
+    font-size: 0.4rem;
+  }
+
+  .loan-btn {
+    margin: 0px;
+    font-size: 0.4rem;
   }
 }
 </style>

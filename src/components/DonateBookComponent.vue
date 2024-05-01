@@ -116,15 +116,15 @@ const submitBook = () => {
 <style scoped>
 .score {
   margin-left: 20px;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .v-card-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .v-btn {
   margin: 10px;
-  font-size: 1.4rem;
+  font-size: 1rem;
 }
 </style>

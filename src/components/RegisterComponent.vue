@@ -76,6 +76,8 @@ const register = async () => {
   justify-content: center;
   align-items: center;
   min-height: 50vh;
+  margin-top: 85px;
+  margin-bottom: 120px;
 }
 
 .register-card {

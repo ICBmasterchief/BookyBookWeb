@@ -1,11 +1,21 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import type { Book, BookPOST } from '@/core/types'
 
 export const useBookStore = defineStore('bookStore', () => {
-  const books = reactive([] as Book[])
+  const books = reactive<Book[]>([])
   const authStore = useAuthStore()
+  const selectedBook = reactive<Book>({
+    id: 0,
+    title: '',
+    author: '',
+    genre: null,
+    year: null,
+    copies: 0,
+    score: 0
+  })
+  const isSelectedBook = ref(false)
 
   async function fetchBooks() {
     try {
@@ -23,7 +33,6 @@ export const useBookStore = defineStore('bookStore', () => {
   }
 
   const addBook = async (book: BookPOST) => {
-    console.log(JSON.stringify(book))
     try {
       const response = await fetch('https://bookybookapi-pre.azurewebsites.net/book', {
         method: 'POST',
@@ -42,7 +51,5 @@ export const useBookStore = defineStore('bookStore', () => {
     }
   }
 
-  return { books, fetchBooks, addBook }
+  return { books, selectedBook, isSelectedBook, fetchBooks, addBook }
 })
-
-// interfaces

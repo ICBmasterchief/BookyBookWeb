@@ -1,17 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import { useBookStore } from '@/stores/BookStore'
+import { useRouter } from 'vue-router'
 import type { Book } from '@/core/types'
 import BookRowComponent from '@/components/BookRowComponent.vue'
 import BookDetailsComponent from '@/components/BookDetailsComponent.vue'
 
-const store = useBookStore()
+const bookStore = useBookStore()
+const router = useRouter()
 
-const books = store.books
-const selectedBook = ref()
+const books = bookStore.books
+const bookDetails = reactive<Book>({
+  id: 0,
+  title: '',
+  author: '',
+  genre: null,
+  year: null,
+  copies: 0,
+  score: 0
+})
 
 const handleBookSelected = (book: Book) => {
-  selectedBook.value = book
+  Object.assign(bookDetails, book)
+}
+
+const handleBorrowing = (book: Book) => {
+  bookStore.selectedBook = book
+  bookStore.isSelectedBook = true
+  router.push('/requestborrowing')
 }
 </script>
 
@@ -28,13 +44,14 @@ const handleBookSelected = (book: Book) => {
                 :key="book.id"
                 :book="book"
                 @bookSelected="handleBookSelected"
+                @requestBorrowing="handleBorrowing"
               />
             </v-list>
           </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="4">
-        <Book-Details-Component :book="selectedBook" />
+        <Book-Details-Component :book="bookDetails" />
       </v-col>
     </v-row>
   </v-container>
@@ -43,5 +60,15 @@ const handleBookSelected = (book: Book) => {
 <style scoped>
 .display-2 {
   font-size: 2rem;
+}
+
+.v-container {
+  padding-top: 0;
+}
+
+@media (max-width: 700px) {
+  .v-container {
+    padding-top: 100px;
+  }
 }
 </style>

@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function navClicked() {
+  router.push('/requestborrowing')
+}
+</script>
+
 <template>
   <v-container>
     <v-row justify="center">
@@ -11,7 +21,7 @@
             donando libros. ¡Sumérgete en el universo de la lectura sin límites!
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary">Navegar Libros</v-btn>
+            <v-btn color="primary" @click="navClicked">Navegar Libros</v-btn>
             <v-btn color="secondary">Donar un Libro</v-btn>
           </v-card-actions>
         </v-card>
@@ -20,10 +30,13 @@
   </v-container>
 </template>
 
-<script setup lang="ts"></script>
-
 <style scoped>
 .pa-5 {
-  padding: 2rem !important;
+  padding: 0rem !important;
+}
+
+.text-h1 {
+  font-size: 2rem;
+  text-align: center;
 }
 </style>

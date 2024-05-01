@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
+import type { User } from '@/core/types'
 
 export const useUserStore = defineStore('userStore', () => {
-  const users = reactive([] as User[])
+  const users = reactive<User[]>([])
   const authStore = useAuthStore()
 
   async function fetchUsers() {
@@ -32,14 +33,3 @@ export const useUserStore = defineStore('userStore', () => {
 
   return { users, fetchUsers }
 })
-
-// interfaces
-interface User {
-  id: number
-  name: string
-  email: string
-  password: string
-  registrationDate: Date
-  penaltyFee: number
-  role: string
-}

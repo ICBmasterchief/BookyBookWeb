@@ -36,7 +36,7 @@ const appTitle = ref('BookyBook')
 .toolbar {
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: #858585;
   color: white;
   position: fixed;

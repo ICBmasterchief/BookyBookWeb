@@ -57,6 +57,8 @@ const login = async () => {
   justify-content: center;
   align-items: center;
   min-height: 50vh;
+  margin-top: 110px;
+  margin-bottom: 120px;
 }
 
 .login-card {
