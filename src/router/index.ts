@@ -42,6 +42,12 @@ const router = createRouter({
       name: 'requestborrowing',
       meta: { requiresAuth: true, requiresSelectedBook: true },
       component: () => import('@/views/RequestBorrowingView.vue')
+    },
+    {
+      path: '/account',
+      name: 'account',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/AccountView.vue')
     }
   ]
 })
@@ -53,7 +59,7 @@ router.beforeEach((to, from, next) => {
     next('/login')
   } else if (to.meta.requiresAuth && to.meta.role && authStore.role !== to.meta.role) {
     next('/unauthorized')
-  } else if (to.meta.requiresSelectedBook && bookStore.isSelectedBook) {
+  } else if (to.meta.requiresSelectedBook && !bookStore.isSelectedBook) {
     next('/library')
   } else {
     next()

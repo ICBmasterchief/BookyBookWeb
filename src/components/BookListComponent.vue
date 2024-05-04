@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useBookStore } from '@/stores/BookStore'
 import { useRouter } from 'vue-router'
 import type { Book } from '@/core/types'
@@ -9,9 +9,10 @@ import BookDetailsComponent from '@/components/BookDetailsComponent.vue'
 const bookStore = useBookStore()
 const router = useRouter()
 
+const showDetails = ref(false)
 const books = bookStore.books
 const bookDetails = reactive<Book>({
-  id: 0,
+  bookId: 0,
   title: '',
   author: '',
   genre: null,
@@ -22,11 +23,11 @@ const bookDetails = reactive<Book>({
 
 const handleBookSelected = (book: Book) => {
   Object.assign(bookDetails, book)
+  showDetails.value = true
 }
 
 const handleBorrowing = (book: Book) => {
-  bookStore.selectedBook = book
-  bookStore.isSelectedBook = true
+  bookStore.selectBook(book)
   router.push('/requestborrowing')
 }
 </script>
@@ -41,7 +42,7 @@ const handleBorrowing = (book: Book) => {
             <v-list>
               <book-row-component
                 v-for="book in books"
-                :key="book.id"
+                :key="book.bookId"
                 :book="book"
                 @bookSelected="handleBookSelected"
                 @requestBorrowing="handleBorrowing"
@@ -51,7 +52,7 @@ const handleBorrowing = (book: Book) => {
         </v-card>
       </v-col>
       <v-col cols="4">
-        <Book-Details-Component :book="bookDetails" />
+        <Book-Details-Component v-if="showDetails" :book="bookDetails" />
       </v-col>
     </v-row>
   </v-container>

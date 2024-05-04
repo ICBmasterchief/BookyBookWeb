@@ -27,7 +27,10 @@ const requestBorrowing = (book: Book) => {
     </v-list-item-content>
     <v-list-item-action class="book-content">
       <v-btn @click="emitDetails(book)" class="btn"> Ver detalles </v-btn>
-      <v-btn v-if="authStore.isAuthenticated" @click="requestBorrowing(props.book)" class="loan-btn"
+      <v-btn
+        v-if="authStore.isAuthenticated"
+        @click="requestBorrowing(props.book)"
+        class="borrowing-btn"
         >Solicitar préstamo</v-btn
       >
     </v-list-item-action>
@@ -56,7 +59,7 @@ const requestBorrowing = (book: Book) => {
   font-size: 0.6rem;
 }
 
-.loan-btn {
+.borrowing-btn {
   margin: 0px;
   font-size: 0.6rem;
 }

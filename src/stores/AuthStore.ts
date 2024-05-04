@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useBorrowingStore } from '@/stores/BorrowingStore'
+import { useBookStore } from '@/stores/BookStore'
+import { useUserStore } from '@/stores/UserStore'
 
 export const useAuthStore = defineStore('authStore', () => {
   const isAuthenticated = ref(false)
@@ -8,13 +11,18 @@ export const useAuthStore = defineStore('authStore', () => {
   const token = ref<string | null>(localStorage.getItem('token') ?? null)
   const decodedToken = ref()
   const router = useRouter()
+  const userIdLoged = ref<number>(0)
 
   function setToken(newToken: string) {
-    isAuthenticated.value = true
     token.value = newToken
+    localStorage.setItem('token', newToken)
     decodedToken.value = decodeJwt(newToken)
-    role.value = decodedToken.value.role
-    console.log(role.value)
+    if (decodedToken.value) {
+      isAuthenticated.value = true
+      role.value = decodedToken.value.role
+      userIdLoged.value = parseInt(decodedToken.value.nameid, 10)
+      localStorage.setItem('role', decodedToken.value.role)
+    }
   }
 
   // Función para decodificar un token JWT
@@ -87,14 +95,38 @@ export const useAuthStore = defineStore('authStore', () => {
   function logout() {
     localStorage.removeItem('token')
     localStorage.removeItem('role')
-    localStorage.removeItem('username')
-    localStorage.removeItem('password')
 
     token.value = null
     role.value = null
+    isAuthenticated.value = false
+    userIdLoged.value = 0
+    decodedToken.value = null
+
+    const borrowingStore = useBorrowingStore()
+    borrowingStore.clearBorrowings()
+    const bookStore = useBookStore()
+    bookStore.clearBooks()
+    const userStore = useUserStore()
+    userStore.clearUsers()
 
     router.push('/login')
   }
 
-  return { isAuthenticated, role, token, login, register }
+  function restoreSession() {
+    const storedToken = localStorage.getItem('token')
+    if (storedToken) {
+      decodedToken.value = decodeJwt(storedToken)
+      if (decodedToken.value) {
+        setToken(storedToken)
+        isAuthenticated.value = true
+        role.value = decodedToken.value.role
+        userIdLoged.value = parseInt(decodedToken.value.nameid, 10) // Asegúrate de que nameid es un número
+        // Restaura cualquier otro estado relevante aquí
+      }
+    }
+  }
+
+  restoreSession()
+
+  return { isAuthenticated, role, token, userIdLoged, login, register, logout, restoreSession }
 })

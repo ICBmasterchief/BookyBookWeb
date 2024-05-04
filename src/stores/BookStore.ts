@@ -7,7 +7,7 @@ export const useBookStore = defineStore('bookStore', () => {
   const books = reactive<Book[]>([])
   const authStore = useAuthStore()
   const selectedBook = reactive<Book>({
-    id: 0,
+    bookId: 0,
     title: '',
     author: '',
     genre: null,
@@ -16,6 +16,17 @@ export const useBookStore = defineStore('bookStore', () => {
     score: 0
   })
   const isSelectedBook = ref(false)
+
+  const selectBook = (book: Book) => {
+    selectedBook.bookId = book.bookId
+    selectedBook.title = book.title
+    selectedBook.author = book.author
+    selectedBook.genre = book.genre
+    selectedBook.year = book.year
+    selectedBook.copies = book.copies
+    selectedBook.score = book.score
+    isSelectedBook.value = true
+  }
 
   async function fetchBooks() {
     try {
@@ -33,6 +44,11 @@ export const useBookStore = defineStore('bookStore', () => {
   }
 
   const addBook = async (book: BookPOST) => {
+    if (!authStore.token || !authStore.isAuthenticated) {
+      console.error('No autorizado: Token no disponible')
+      return
+    }
+
     try {
       const response = await fetch('https://bookybookapi-pre.azurewebsites.net/book', {
         method: 'POST',
@@ -51,5 +67,43 @@ export const useBookStore = defineStore('bookStore', () => {
     }
   }
 
-  return { books, selectedBook, isSelectedBook, fetchBooks, addBook }
+  async function fetchBook(bookId: number): Promise<Book | null> {
+    try {
+      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/book/${bookId}`)
+
+      if (!response.ok) {
+        throw new Error(`Error al obtener el libro ${bookId}`)
+      }
+
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.error('Error fetching book:', error)
+      return null
+    }
+  }
+
+  function clearBooks() {
+    Object.assign(selectedBook, {
+      bookId: 0,
+      title: '',
+      author: '',
+      genre: null,
+      year: null,
+      copies: 0,
+      score: 0
+    })
+    isSelectedBook.value = false
+  }
+
+  return {
+    books,
+    selectedBook,
+    isSelectedBook,
+    selectBook,
+    fetchBooks,
+    addBook,
+    fetchBook,
+    clearBooks
+  }
 })

@@ -6,9 +6,18 @@ import type { User } from '@/core/types'
 export const useUserStore = defineStore('userStore', () => {
   const users = reactive<User[]>([])
   const authStore = useAuthStore()
+  const user = reactive<User>({
+    userId: 0,
+    userName: '',
+    email: '',
+    password: '',
+    registrationDate: new Date(),
+    penaltyFee: 0,
+    role: ''
+  })
 
   async function fetchUsers() {
-    if (!authStore.token || !authStore.isAuthenticated) {
+    if (!authStore.token || !authStore.isAuthenticated || authStore.role != 'admin') {
       console.error('No autorizado: Token no disponible')
       return
     }
@@ -31,5 +40,69 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
-  return { users, fetchUsers }
+  async function fetchUser(userId: number) {
+    if (!authStore.token || !authStore.isAuthenticated) {
+      console.error('No autorizado: Token no disponible')
+      return
+    }
+
+    try {
+      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al obtener el usuario')
+      }
+
+      const data = await response.json()
+      Object.assign(user, data)
+    } catch (error) {
+      console.error('Error fetching user:', error)
+    }
+  }
+
+  const fetchUpdateUser = async (userId: number, name: string, password: string) => {
+    if (!authStore.token || !authStore.isAuthenticated) {
+      console.error('No autorizado: Token no disponible')
+      return
+    }
+
+    try {
+      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/User/${userId}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, password })
+      })
+
+      if (!response.ok) {
+        throw new Error('Error en la actualización de usuario.')
+      }
+
+      const data = await response.json()
+      Object.assign(user, data)
+    } catch (error) {
+      console.error('Error al actualizar usuario:', error)
+    }
+  }
+
+  function clearUsers() {
+    users.splice(0, users.length)
+    Object.assign(user, {
+      userId: 0,
+      userName: '',
+      email: '',
+      password: '',
+      registrationDate: new Date(),
+      penaltyFee: 0,
+      role: ''
+    })
+  }
+
+  return { users, user, fetchUsers, fetchUser, fetchUpdateUser, clearUsers }
 })

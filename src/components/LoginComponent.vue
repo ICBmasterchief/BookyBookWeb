@@ -17,7 +17,6 @@ const login = async () => {
   await authStore.login(email.value, password.value)
   if (authStore.isAuthenticated) {
     console.log('Sesión iniciada con éxito')
-    console.log(authStore.token)
     router.push('/')
   } else {
     console.error('Error al iniciar sesión')
