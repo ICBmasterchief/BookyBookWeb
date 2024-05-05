@@ -91,6 +91,32 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
+  const fetchDeleteUser = async (userId: number): Promise<boolean> => {
+    if (!authStore.token || !authStore.isAuthenticated) {
+      console.error('No autorizado: Token no disponible')
+      return false
+    }
+
+    try {
+      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/User/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Error en la eliminación del usuario.')
+      }
+
+      return true
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error)
+      return false
+    }
+  }
+
   function clearUsers() {
     users.splice(0, users.length)
     Object.assign(user, {
@@ -104,5 +130,5 @@ export const useUserStore = defineStore('userStore', () => {
     })
   }
 
-  return { users, user, fetchUsers, fetchUser, fetchUpdateUser, clearUsers }
+  return { users, user, fetchUsers, fetchUser, fetchUpdateUser, fetchDeleteUser, clearUsers }
 })

@@ -11,21 +11,21 @@ const appTitle = ref('BookyBook')
   <v-toolbar class="toolbar">
     <router-link class="app-title" to="/">{{ appTitle }}</router-link>
     <div class="menu-items">
-      <router-link to="/library" class="menu-link">Library</router-link>
+      <router-link to="/library" class="menu-link">Biblioteca</router-link>
       <router-link v-if="!authStore.isAuthenticated" to="/login" class="menu-link"
-        >Login</router-link
+        >Iniciar sesión</router-link
       >
       <router-link v-if="!authStore.isAuthenticated" to="/register" class="menu-link"
-        >Register</router-link
+        >Registrarse</router-link
       >
       <router-link v-if="authStore.isAuthenticated" to="/account" class="menu-link"
-        >Account</router-link
+        >Cuenta</router-link
       >
       <router-link v-if="authStore.isAuthenticated" to="/donatebook" class="menu-link"
-        >Donate book</router-link
+        >Donar libro</router-link
       >
       <router-link v-if="authStore.role === 'admin'" to="/users" class="menu-link"
-        >Users</router-link
+        >(Admin)Usuarios</router-link
       >
     </div>
     <div class="placeholder"></div>

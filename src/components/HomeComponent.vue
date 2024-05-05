@@ -1,10 +1,21 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const router = useRouter()
 
-function navClicked() {
-  router.push('/requestborrowing')
+const authStore = useAuthStore()
+
+function libraryClicked() {
+  router.push('/library')
+}
+
+function donateClicked() {
+  router.push('/donatebook')
+}
+
+function loginClicked() {
+  router.push('/login')
 }
 </script>
 
@@ -21,8 +32,13 @@ function navClicked() {
             donando libros. ¡Sumérgete en el universo de la lectura sin límites!
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" @click="navClicked">Navegar Libros</v-btn>
-            <v-btn color="secondary">Donar un Libro</v-btn>
+            <v-btn color="primary" @click="libraryClicked">Ver Biblioteca</v-btn>
+            <v-btn v-if="authStore.isAuthenticated" color="secondary" @click="donateClicked"
+              >Donar un Libro</v-btn
+            >
+            <v-btn v-if="!authStore.isAuthenticated" color="secondary" @click="loginClicked"
+              >Iniciar sesión</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>

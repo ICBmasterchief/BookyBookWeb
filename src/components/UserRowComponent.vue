@@ -9,13 +9,21 @@ const props = defineProps<{
 <template>
   <v-list-item>
     <v-list-item-content class="book-content">
-      <v-list-item-title class="headline">{{ props.user.name }}</v-list-item-title>
-      <v-list-item-subtitle class="subtitle-1">{{ props.user.email }}</v-list-item-subtitle>
-      <v-list-item-subtitle class="subtitle-1">{{
-        props.user.registrationDate
-      }}</v-list-item-subtitle>
-      <v-list-item-subtitle class="subtitle-1">{{ props.user.penaltyFee }}</v-list-item-subtitle>
-      <v-list-item-subtitle class="subtitle-1">{{ props.user.role }}</v-list-item-subtitle>
+      <v-list-item-title class="headline"
+        ><strong>Nombre: </strong>{{ props.user.userName }}</v-list-item-title
+      >
+      <v-list-item-subtitle class="subtitle-1"
+        ><strong>Email: </strong>{{ props.user.email }}</v-list-item-subtitle
+      >
+      <v-list-item-subtitle class="subtitle-1"
+        ><strong>Fecha de registro: </strong>{{ props.user.registrationDate }}</v-list-item-subtitle
+      >
+      <v-list-item-subtitle class="subtitle-1"
+        ><strong>Multa: </strong>{{ props.user.penaltyFee }}</v-list-item-subtitle
+      >
+      <v-list-item-subtitle class="subtitle-1"
+        ><strong>Rol: </strong>{{ props.user.role }}</v-list-item-subtitle
+      >
     </v-list-item-content>
     <v-divider></v-divider>
   </v-list-item>
@@ -23,11 +31,12 @@ const props = defineProps<{
 
 <style scoped>
 .headline {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .subtitle-1 {
   font-size: 1rem;
+  opacity: 0.8;
 }
 
 .book-content {

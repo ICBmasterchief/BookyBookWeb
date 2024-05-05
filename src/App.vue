@@ -2,9 +2,13 @@
 import HeaderComponent from './components/HeaderComponent.vue'
 import FooterComponent from './components/FooterComponent.vue'
 import { useBookStore } from '@/stores/BookStore'
+import { onMounted } from 'vue'
 
-const store = useBookStore()
-store.fetchBooks()
+const bookStore = useBookStore()
+
+onMounted(async () => {
+  await bookStore.fetchBooks()
+})
 </script>
 
 <template>

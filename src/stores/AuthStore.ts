@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('authStore', () => {
   const isAuthenticated = ref(false)
   const role = ref<string | null>(localStorage.getItem('role') ?? null)
   const token = ref<string | null>(localStorage.getItem('token') ?? null)
-  const decodedToken = ref()
+  const decodedToken = ref<DecodedToken | null>()
   const router = useRouter()
   const userIdLoged = ref<number>(0)
 
@@ -25,8 +25,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   }
 
-  // Función para decodificar un token JWT
-  function decodeJwt(token: string): Record<string, unknown> | null {
+  function decodeJwt(token: string): DecodedToken | null {
     if (!token) {
       return null
     }
@@ -43,7 +42,7 @@ export const useAuthStore = defineStore('authStore', () => {
           .join('')
       )
 
-      return JSON.parse(jsonPayload)
+      return JSON.parse(jsonPayload) as DecodedToken
     } catch (error) {
       console.error('Error al decodificar el token:', error)
       return null
@@ -85,8 +84,7 @@ export const useAuthStore = defineStore('authStore', () => {
         throw new Error('Error en la solicitud de registro')
       }
 
-      const data = await response.text()
-      setToken(data)
+      await login(email, password)
     } catch (error) {
       console.error('Error al iniciar sesión:', error)
     }
@@ -116,17 +114,49 @@ export const useAuthStore = defineStore('authStore', () => {
     const storedToken = localStorage.getItem('token')
     if (storedToken) {
       decodedToken.value = decodeJwt(storedToken)
-      if (decodedToken.value) {
+      if (!decodedToken.value) {
+        logout()
+      } else {
         setToken(storedToken)
         isAuthenticated.value = true
         role.value = decodedToken.value.role
-        userIdLoged.value = parseInt(decodedToken.value.nameid, 10) // Asegúrate de que nameid es un número
-        // Restaura cualquier otro estado relevante aquí
+        userIdLoged.value = parseInt(decodedToken.value.nameid, 10)
       }
+    }
+  }
+
+  function isTokenExpired(): boolean {
+    if (!token.value) return true
+
+    try {
+      const decoded = decodeJwt(token.value)
+      if (!decoded) return true
+
+      const currentTime = Math.floor(Date.now() / 1000)
+      return decoded.exp < currentTime
+    } catch (error) {
+      console.error('Error al verificar la expiración del token:', error)
+      return true
     }
   }
 
   restoreSession()
 
-  return { isAuthenticated, role, token, userIdLoged, login, register, logout, restoreSession }
+  return {
+    isAuthenticated,
+    role,
+    token,
+    userIdLoged,
+    login,
+    register,
+    logout,
+    restoreSession,
+    isTokenExpired
+  }
 })
+
+interface DecodedToken {
+  exp: number
+  nameid: string
+  role: string
+}

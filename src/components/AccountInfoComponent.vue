@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useUserStore } from '@/stores/UserStore'
 import AccountEditInfoComponent from '@/components/AccountEditInfoComponent.vue'
@@ -7,10 +7,17 @@ import AccountEditInfoComponent from '@/components/AccountEditInfoComponent.vue'
 const authStore = useAuthStore()
 const userStore = useUserStore()
 
-userStore.fetchUser(authStore.userIdLoged)
+onMounted(async () => {
+  authStore.restoreSession
+  await userStore.fetchUser(authStore.userIdLoged)
+})
 
 const user = computed(() => userStore.user)
 const showEditSection = ref(false)
+const showDialog = ref(false)
+
+const snackbar = ref(false)
+const snackbarMessage = ref('')
 
 const saveNewUserInfo = (newName: string, newPassword: string) => {
   userStore.fetchUpdateUser(authStore.userIdLoged, newName, newPassword)
@@ -24,10 +31,19 @@ const cancelEdit = () => {
 const logout = () => {
   authStore.logout()
 }
+
+const confirmDeleteUser = async () => {
+  const success = await userStore.fetchDeleteUser(authStore.userIdLoged)
+  if (success) {
+    authStore.logout()
+  } else {
+    snackbarMessage.value = 'Error al intentar eliminar el usuario.'
+    snackbar.value = true
+  }
+}
 </script>
 
 <template>
-  <!-- Sección de Información del Usuario -->
   <v-card>
     <v-card-title>Información del Usuario</v-card-title>
     <v-card-text>
@@ -40,8 +56,11 @@ const logout = () => {
           <v-btn @click="showEditSection = true" color="green">Editar</v-btn>
         </div>
         <div class="btn-logout">
-          <v-btn class="btn-logout" @click="logout" color="grey">Cerrar sesión</v-btn>
+          <v-btn @click="logout" color="grey">Cerrar sesión</v-btn>
         </div>
+      </div>
+      <div class="btn-delete">
+        <v-btn @click="showDialog = true" color="#C00000">Eliminar cuenta</v-btn>
       </div>
     </v-card-text>
   </v-card>
@@ -50,13 +69,39 @@ const logout = () => {
     @saveNewUserInfo="saveNewUserInfo"
     @cancelEdit="cancelEdit"
   />
+
+  <v-dialog v-model="showDialog" persistent max-width="290">
+    <v-card>
+      <v-card-title class="text-h5">Confirmar eliminación</v-card-title>
+      <v-card-text
+        >¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede
+        deshacer.</v-card-text
+      >
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" @click="showDialog = false">Cancelar</v-btn>
+        <v-btn color="red darken-1" @click="confirmDeleteUser">Eliminar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-snackbar v-model="snackbar" multi-line :timeout="5000" bottom right>
+    {{ snackbarMessage }}
+    <v-btn color="red" @click="snackbar = false">Cerrar</v-btn>
+  </v-snackbar>
 </template>
 
 <style scoped>
 .buttons {
   display: flex;
 }
+
 .btn-logout {
   padding-left: 15px;
+}
+
+.btn-delete {
+  float: right;
+  padding-bottom: 15px;
 }
 </style>

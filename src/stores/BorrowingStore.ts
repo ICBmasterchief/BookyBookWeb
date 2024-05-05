@@ -112,8 +112,6 @@ export const useBorrowingStore = defineStore('borrowingStore', () => {
         throw new Error('Error en la actualización del préstamo.')
       }
 
-      //const data = await response.json()
-      //Object.assign(user, data)
       return true
     } catch (error) {
       console.error('Error al actualizar préstamo:', error)

@@ -55,10 +55,22 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const bookStore = useBookStore()
+
+  if (!authStore.token) {
+    next()
+    return
+  }
+
+  if (authStore.isTokenExpired()) {
+    authStore.logout()
+    next('/login')
+    return
+  }
+
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next('/login')
   } else if (to.meta.requiresAuth && to.meta.role && authStore.role !== to.meta.role) {
-    next('/unauthorized')
+    next('/')
   } else if (to.meta.requiresSelectedBook && !bookStore.isSelectedBook) {
     next('/library')
   } else {
