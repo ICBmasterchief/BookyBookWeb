@@ -15,7 +15,7 @@ const users = store.users
         <v-card>
           <v-card-text>
             <v-list>
-              <user-row-component v-for="user in users" :key="user.id" :user="user" />
+              <user-row-component v-for="user in users" :key="user.userId" :user="user" />
             </v-list>
           </v-card-text>
         </v-card>

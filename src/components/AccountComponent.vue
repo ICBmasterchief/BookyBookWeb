@@ -5,6 +5,7 @@ import { useBorrowingStore } from '@/stores/BorrowingStore'
 import { useBookStore } from '@/stores/BookStore'
 import AccountBorrowingsComponent from '@/components/AccountBorrowingsComponent.vue'
 import AccountInfoComponent from '@/components/AccountInfoComponent.vue'
+import UserChartComponent from '@/components/UserChartComponent.vue'
 
 const authStore = useAuthStore()
 const borrowingStore = useBorrowingStore()
@@ -56,6 +57,7 @@ const returnBorrowing = async (borrowingId: number) => {
     <div class="borrowing-card">
       <v-card>
         <v-card-title>Préstamos</v-card-title>
+        <UserChartComponent />
         <v-card-text>
           <v-btn @click="showBorrowings">{{ btnBorrowings }}</v-btn>
           <div v-if="showingBorrowings" class="borrowing-list">
