@@ -45,7 +45,7 @@ const returnBorrowing = (borrowingId: number) => {
         <strong>Fecha de devolución: </strong>{{ props.borrowing.returnedDate }}
       </div>
       <div v-if="props.borrowing.returned">
-        <strong>Multa: </strong>{{ props.borrowing.penaltyFee }}
+        <strong>Multa: </strong>{{ props.borrowing.penaltyFee }} €
       </div>
     </v-list-item-content>
     <v-list-item-action v-if="!props.borrowing.returned">

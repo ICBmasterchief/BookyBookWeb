@@ -41,6 +41,14 @@ const confirmDeleteUser = async () => {
     snackbar.value = true
   }
 }
+
+const payPenaltyFee = async () => {
+  const success = await userStore.fetchPayPenaltyFee(authStore.userIdLoged)
+  if (!success) {
+    snackbarMessage.value = 'Error al intentar pagar la multa.'
+    snackbar.value = true
+  }
+}
 </script>
 
 <template>
@@ -50,13 +58,16 @@ const confirmDeleteUser = async () => {
       <div><strong>Nombre:</strong> {{ user.userName }}</div>
       <div><strong>Email:</strong> {{ user.email }}</div>
       <div><strong>Fecha de Registro:</strong> {{ user.registrationDate }}</div>
-      <div><strong>Multa:</strong> {{ user.penaltyFee }}</div>
+      <div><strong>Multa:</strong> {{ user.penaltyFee }} €</div>
       <div class="buttons">
         <div>
           <v-btn @click="showEditSection = true" color="green">Editar</v-btn>
         </div>
+        <div class="btn-pay">
+          <v-btn @click="payPenaltyFee" color="#CCCCCC">Pagar multa</v-btn>
+        </div>
         <div class="btn-logout">
-          <v-btn @click="logout" color="grey">Cerrar sesión</v-btn>
+          <v-btn @click="logout" color="#9C5858">Cerrar sesión</v-btn>
         </div>
       </div>
       <div class="btn-delete">
@@ -103,5 +114,9 @@ const confirmDeleteUser = async () => {
 .btn-delete {
   float: right;
   padding-bottom: 15px;
+}
+
+.btn-pay {
+  padding-left: 15px;
 }
 </style>

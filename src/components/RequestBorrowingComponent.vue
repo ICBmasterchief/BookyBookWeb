@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useBookStore } from '@/stores/BookStore'
 import { useBorrowingStore } from '@/stores/BorrowingStore'
 import { useRouter } from 'vue-router'
@@ -7,7 +7,10 @@ import BorrowingBookComponent from '@/components/BorrowingBookComponent.vue'
 import BorrowingDetailsComponent from '@/components/BorrowingDetailsComponent.vue'
 
 const bookStore = useBookStore()
-bookStore.fetchBook
+
+onMounted(async () => {
+  bookStore.fetchBook
+})
 const borrowingStore = useBorrowingStore()
 const router = useRouter()
 

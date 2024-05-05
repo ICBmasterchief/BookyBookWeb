@@ -19,7 +19,7 @@ const props = defineProps<{
         ><strong>Fecha de registro: </strong>{{ props.user.registrationDate }}</v-list-item-subtitle
       >
       <v-list-item-subtitle class="subtitle-1"
-        ><strong>Multa: </strong>{{ props.user.penaltyFee }}</v-list-item-subtitle
+        ><strong>Multa: </strong>{{ props.user.penaltyFee }} €</v-list-item-subtitle
       >
       <v-list-item-subtitle class="subtitle-1"
         ><strong>Rol: </strong>{{ props.user.role }}</v-list-item-subtitle

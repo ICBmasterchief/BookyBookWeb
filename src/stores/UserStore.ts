@@ -91,6 +91,37 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
+  const fetchPayPenaltyFee = async (userId: number): Promise<boolean> => {
+    if (!authStore.token || !authStore.isAuthenticated) {
+      console.error('No autorizado: Token no disponible')
+      return false
+    }
+
+    try {
+      const response = await fetch(
+        `https://bookybookapi-pre.azurewebsites.net/User/${userId}/paypenaltyfee`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${authStore.token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Error en la actualización de usuario.')
+      }
+
+      const data = await response.json()
+      Object.assign(user, data)
+      return true
+    } catch (error) {
+      console.error('Error al actualizar usuario:', error)
+      return false
+    }
+  }
+
   const fetchDeleteUser = async (userId: number): Promise<boolean> => {
     if (!authStore.token || !authStore.isAuthenticated) {
       console.error('No autorizado: Token no disponible')
@@ -130,5 +161,14 @@ export const useUserStore = defineStore('userStore', () => {
     })
   }
 
-  return { users, user, fetchUsers, fetchUser, fetchUpdateUser, fetchDeleteUser, clearUsers }
+  return {
+    users,
+    user,
+    fetchUsers,
+    fetchUser,
+    fetchUpdateUser,
+    fetchPayPenaltyFee,
+    fetchDeleteUser,
+    clearUsers
+  }
 })

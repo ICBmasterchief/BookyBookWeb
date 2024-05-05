@@ -80,8 +80,6 @@ const register = async () => {
 }
 
 .register-card {
-  width: 500px; /* Ajusta el ancho según tus preferencias */
+  width: 500px;
 }
-
-/* Puedes personalizar los estilos según tus preferencias */
 </style>
