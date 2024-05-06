@@ -6,6 +6,9 @@ import { useBookStore } from '@/stores/BookStore'
 import { useUserStore } from '@/stores/UserStore'
 
 export const useAuthStore = defineStore('authStore', () => {
+  //const baseUrl = 'http://api:7790'
+  const baseUrl = 'https://bookybookapi-pre.azurewebsites.net'
+
   const isAuthenticated = ref(false)
   const role = ref<string | null>(localStorage.getItem('role') ?? null)
   const token = ref<string | null>(localStorage.getItem('token') ?? null)
@@ -51,7 +54,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('https://bookybookapi-pre.azurewebsites.net/auth/login', {
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -72,7 +75,7 @@ export const useAuthStore = defineStore('authStore', () => {
 
   const register = async (username: string, email: string, password: string) => {
     try {
-      const response = await fetch('https://bookybookapi-pre.azurewebsites.net/auth/register', {
+      const response = await fetch(`${baseUrl}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -143,6 +146,7 @@ export const useAuthStore = defineStore('authStore', () => {
   restoreSession()
 
   return {
+    baseUrl,
     isAuthenticated,
     role,
     token,

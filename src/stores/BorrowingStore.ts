@@ -15,7 +15,7 @@ export const useBorrowingStore = defineStore('borrowingStore', () => {
     }
 
     try {
-      const response = await fetch('https://bookybookapi-pre.azurewebsites.net/borrowing', {
+      const response = await fetch(`${authStore.baseUrl}/borrowing`, {
         headers: {
           Authorization: `Bearer ${authStore.token}`
         }
@@ -39,16 +39,13 @@ export const useBorrowingStore = defineStore('borrowingStore', () => {
     }
 
     try {
-      const response = await fetch(
-        `https://bookybookapi-pre.azurewebsites.net//Borrowing?bookId=${bookId}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${authStore.token}`,
-            'Content-Type': 'application/json'
-          }
+      const response = await fetch(`${authStore.baseUrl}/Borrowing?bookId=${bookId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+          'Content-Type': 'application/json'
         }
-      )
+      })
 
       if (!response.ok) {
         throw new Error('Error en la solicitud de creación de préstamo')
@@ -68,14 +65,11 @@ export const useBorrowingStore = defineStore('borrowingStore', () => {
     }
 
     try {
-      const response = await fetch(
-        `https://bookybookapi-pre.azurewebsites.net/User/${userId}/borrowings`,
-        {
-          headers: {
-            Authorization: `Bearer ${authStore.token}`
-          }
+      const response = await fetch(`${authStore.baseUrl}/User/${userId}/borrowings`, {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`
         }
-      )
+      })
 
       if (!response.ok) {
         throw new Error('Error al obtener los prestamos del usuario ' + userId)
@@ -97,16 +91,13 @@ export const useBorrowingStore = defineStore('borrowingStore', () => {
     }
 
     try {
-      const response = await fetch(
-        `https://bookybookapi-pre.azurewebsites.net/Borrowing/${borrowingId}/return`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${authStore.token}`,
-            'Content-Type': 'application/json'
-          }
+      const response = await fetch(`${authStore.baseUrl}/Borrowing/${borrowingId}/return`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+          'Content-Type': 'application/json'
         }
-      )
+      })
 
       if (!response.ok) {
         throw new Error('Error en la actualización del préstamo.')

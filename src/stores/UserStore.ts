@@ -23,7 +23,7 @@ export const useUserStore = defineStore('userStore', () => {
     }
 
     try {
-      const response = await fetch('https://bookybookapi-pre.azurewebsites.net/user', {
+      const response = await fetch(`${authStore.baseUrl}/user`, {
         headers: {
           Authorization: `Bearer ${authStore.token}`
         }
@@ -47,7 +47,7 @@ export const useUserStore = defineStore('userStore', () => {
     }
 
     try {
-      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/user/${userId}`, {
+      const response = await fetch(`${authStore.baseUrl}/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${authStore.token}`
         }
@@ -71,7 +71,7 @@ export const useUserStore = defineStore('userStore', () => {
     }
 
     try {
-      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/User/${userId}`, {
+      const response = await fetch(`${authStore.baseUrl}/User/${userId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${authStore.token}`,
@@ -98,16 +98,13 @@ export const useUserStore = defineStore('userStore', () => {
     }
 
     try {
-      const response = await fetch(
-        `https://bookybookapi-pre.azurewebsites.net/User/${userId}/paypenaltyfee`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${authStore.token}`,
-            'Content-Type': 'application/json'
-          }
+      const response = await fetch(`${authStore.baseUrl}/User/${userId}/paypenaltyfee`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+          'Content-Type': 'application/json'
         }
-      )
+      })
 
       if (!response.ok) {
         throw new Error('Error en la actualización de usuario.')
@@ -129,7 +126,7 @@ export const useUserStore = defineStore('userStore', () => {
     }
 
     try {
-      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/User/${userId}`, {
+      const response = await fetch(`${authStore.baseUrl}/User/${userId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${authStore.token}`,

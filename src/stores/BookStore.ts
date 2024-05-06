@@ -30,7 +30,7 @@ export const useBookStore = defineStore('bookStore', () => {
 
   async function fetchBooks() {
     try {
-      const response = await fetch('https://bookybookapi-pre.azurewebsites.net/book')
+      const response = await fetch(`${authStore.baseUrl}/book`)
 
       if (!response.ok) {
         throw new Error('Error al obtener libros')
@@ -50,7 +50,7 @@ export const useBookStore = defineStore('bookStore', () => {
     }
 
     try {
-      const response = await fetch('https://bookybookapi-pre.azurewebsites.net/book', {
+      const response = await fetch(`${authStore.baseUrl}/book`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${authStore.token}`,
@@ -69,7 +69,7 @@ export const useBookStore = defineStore('bookStore', () => {
 
   async function fetchBook(bookId: number): Promise<Book | null> {
     try {
-      const response = await fetch(`https://bookybookapi-pre.azurewebsites.net/book/${bookId}`)
+      const response = await fetch(`${authStore.baseUrl}/book/${bookId}`)
 
       if (!response.ok) {
         throw new Error(`Error al obtener el libro ${bookId}`)
