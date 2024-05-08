@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import { Book } from '@/assets/types'
+import type { Book } from '@/core/types'
 
 defineProps<{ book: Book }>()
 </script>
@@ -9,6 +8,7 @@ defineProps<{ book: Book }>()
   <v-card v-if="book" class="details">
     <v-card-title class="headline">{{ book.title }}</v-card-title>
     <v-card-text class="subtitle-1">
+      <p>Autor: {{ book.author }}</p>
       <p>Género: {{ book.genre }}</p>
       <p>Año: {{ book.year }}</p>
       <p>Puntuación: {{ book.score }}</p>

@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/UserStore'
 import UserRowComponent from '@/components/UserRowComponent.vue'
+import { onMounted } from 'vue'
 
-const store = useUserStore()
-store.fetchUsers()
-const users = store.users
+const userStore = useUserStore()
+
+onMounted(async () => {
+  await userStore.fetchUsers()
+})
+const users = userStore.users
 </script>
 
 <template>
@@ -15,7 +19,7 @@ const users = store.users
         <v-card>
           <v-card-text>
             <v-list>
-              <user-row-component v-for="user in users" :key="user.id" :user="user" />
+              <user-row-component v-for="user in users" :key="user.userId" :user="user" />
             </v-list>
           </v-card-text>
         </v-card>

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/UserStore'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const router = useRouter()
-
-const userStore = useUserStore()
+const authStore = useAuthStore()
 
 const username = ref('')
 const email = ref('')
@@ -25,8 +24,8 @@ const register = async () => {
     return
   }
 
-  await userStore.register(username.value, email.value, password.value)
-  if (userStore.token) {
+  await authStore.register(username.value, email.value, password.value)
+  if (authStore.token) {
     console.log('Sesión iniciada con éxito')
     router.push('/')
   } else {
@@ -76,11 +75,11 @@ const register = async () => {
   justify-content: center;
   align-items: center;
   min-height: 50vh;
+  margin-top: 85px;
+  margin-bottom: 120px;
 }
 
 .register-card {
-  width: 500px; /* Ajusta el ancho según tus preferencias */
+  width: 500px;
 }
-
-/* Puedes personalizar los estilos según tus preferencias */
 </style>

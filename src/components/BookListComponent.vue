@@ -1,17 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { useBookStore } from '@/stores/BookStore'
-import { Book } from '@/assets/types'
+import { useRouter } from 'vue-router'
+import type { Book } from '@/core/types'
 import BookRowComponent from '@/components/BookRowComponent.vue'
 import BookDetailsComponent from '@/components/BookDetailsComponent.vue'
 
-const store = useBookStore()
+const bookStore = useBookStore()
+const router = useRouter()
 
-const books = store.books
-const selectedBook = ref()
+const showDetails = ref(false)
+const books = bookStore.books
+const bookDetails = reactive<Book>({
+  bookId: 0,
+  title: '',
+  author: '',
+  genre: null,
+  year: null,
+  copies: 0,
+  score: 0
+})
 
 const handleBookSelected = (book: Book) => {
-  selectedBook.value = book
+  Object.assign(bookDetails, book)
+  showDetails.value = true
+}
+
+const handleBorrowing = (book: Book) => {
+  bookStore.selectBook(book)
+  router.push('/requestborrowing')
 }
 </script>
 
@@ -25,16 +42,17 @@ const handleBookSelected = (book: Book) => {
             <v-list>
               <book-row-component
                 v-for="book in books"
-                :key="book.id"
+                :key="book.bookId"
                 :book="book"
                 @bookSelected="handleBookSelected"
+                @requestBorrowing="handleBorrowing"
               />
             </v-list>
           </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="4">
-        <Book-Details-Component :book="selectedBook" />
+        <Book-Details-Component v-if="showDetails" :book="bookDetails" />
       </v-col>
     </v-row>
   </v-container>
@@ -45,56 +63,13 @@ const handleBookSelected = (book: Book) => {
   font-size: 2rem;
 }
 
-/* .headline {
-  font-size: 1.5rem;
+.v-container {
+  padding-top: 0;
 }
 
-.subtitle-1 {
-  font-size: 1rem;
-}
-
-.booklist:after {
-  display: table;
-}
-
-.book-content {
-  float: left;
-  width: 50%;
-  padding: 10px;
-}
-
-.btn {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-.details {
-  position: fixed;
-  margin-top: 50px;
-}
-
-@media (max-width: 1280px) {
-  .display-2 {
-    font-size: 1rem;
+@media (max-width: 700px) {
+  .v-container {
+    padding-top: 100px;
   }
-
-  .headline {
-    font-size: 0.75rem;
-  }
-
-  .subtitle-1 {
-    font-size: 0.5rem;
-  }
-  .btn {
-    font-size: 0.5rem;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-  } 
-} */
+}
 </style>

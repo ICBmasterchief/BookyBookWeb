@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/UserStore'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const router = useRouter()
 
-const userStore = useUserStore()
+const authStore = useAuthStore()
 
 const email = ref('')
 const password = ref('')
@@ -14,10 +14,9 @@ const snackbar = ref(false)
 const snackbarMessage = ref('')
 
 const login = async () => {
-  await userStore.login(email.value, password.value)
-  if (userStore.isAuthenticated) {
+  await authStore.login(email.value, password.value)
+  if (authStore.isAuthenticated) {
     console.log('Sesión iniciada con éxito')
-    console.log(userStore.token)
     router.push('/')
   } else {
     console.error('Error al iniciar sesión')
@@ -57,6 +56,8 @@ const login = async () => {
   justify-content: center;
   align-items: center;
   min-height: 50vh;
+  margin-top: 110px;
+  margin-bottom: 120px;
 }
 
 .login-card {

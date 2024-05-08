@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/AuthStore'
+
+const router = useRouter()
+
+const authStore = useAuthStore()
+
+function libraryClicked() {
+  router.push('/library')
+}
+
+function donateClicked() {
+  router.push('/donatebook')
+}
+
+function loginClicked() {
+  router.push('/login')
+}
+</script>
+
 <template>
   <v-container>
     <v-row justify="center">
@@ -11,8 +32,13 @@
             donando libros. ¡Sumérgete en el universo de la lectura sin límites!
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary">Navegar Libros</v-btn>
-            <v-btn color="secondary">Donar un Libro</v-btn>
+            <v-btn color="primary" @click="libraryClicked">Ver Biblioteca</v-btn>
+            <v-btn v-if="authStore.isAuthenticated" color="secondary" @click="donateClicked"
+              >Donar un Libro</v-btn
+            >
+            <v-btn v-if="!authStore.isAuthenticated" color="secondary" @click="loginClicked"
+              >Iniciar sesión</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
@@ -20,10 +46,13 @@
   </v-container>
 </template>
 
-<script setup lang="ts"></script>
-
 <style scoped>
 .pa-5 {
-  padding: 2rem !important;
+  padding: 0rem !important;
+}
+
+.text-h1 {
+  font-size: 2rem;
+  text-align: center;
 }
 </style>

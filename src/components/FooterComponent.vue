@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <v-footer app dark>
@@ -23,6 +21,12 @@ import { ref } from 'vue'
 .v-footer {
   background-color: #333;
   color: white;
-  font-size: 2vh;
+  font-size: 1.75vh;
+  padding: 0rem;
+}
+
+.text-center {
+  padding-top: 0;
+  padding-bottom: 1.5rem;
 }
 </style>
