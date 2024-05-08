@@ -6,8 +6,8 @@ import { useBookStore } from '@/stores/BookStore'
 import { useUserStore } from '@/stores/UserStore'
 
 export const useAuthStore = defineStore('authStore', () => {
-  //const baseUrl = 'http://localhost:7790'
-  const baseUrl = 'https://bookybookapi-pre.azurewebsites.net'
+  const baseUrl = 'http://localhost:7791'
+  //const baseUrl = 'https://bookybookapi-pre.azurewebsites.net'
 
   const isAuthenticated = ref(false)
   const role = ref<string | null>(localStorage.getItem('role') ?? null)
